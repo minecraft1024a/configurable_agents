@@ -8,7 +8,7 @@ from typing import Any, cast
 from src.app.plugin_system.base import BasePlugin, register_plugin
 from src.kernel.logger import get_logger
 
-from .components.agent import GeneralAgent
+from .components.agent import FinishMissionTool, GeneralAgent
 from .config import ConfigurableAgentsConfig, MODEL_TASK_CHOICES
 
 
@@ -34,6 +34,11 @@ def _normalize_usables(values: list[str], agent_name: str) -> list[str]:
         if len(parts) != 3 or not all(parts) or parts[1] != _PREFIX_TYPES[prefix]:
             logger.warning(
                 f"Agent '{agent_name}' 的 usable '{value}' 不是匹配前缀的完整组件签名，已忽略"
+            )
+            continue
+        if parts[1] == "tool" and parts[2] == "finish-mission":
+            logger.warning(
+                f"Agent '{agent_name}' 的 usable '{value}' 与内置 tool-finish-mission 重名，已忽略"
             )
             continue
         # 配置中保留类型前缀用于校验；BaseAgent 的注册表解析只接收纯签名。
@@ -81,7 +86,10 @@ class ConfigurableAgentsPlugin(BasePlugin):
                 "description": profile.description.strip(),
                 "prompt": profile.prompt.strip(),
                 "model_task": profile.model_task,
-                "usables": _normalize_usables(profile.usables, agent_name),
+                "usables": [
+                    FinishMissionTool,
+                    *_normalize_usables(profile.usables, agent_name),
+                ],
                 "max_steps": profile.max_steps,
                 "__module__": GeneralAgent.__module__,
                 "__doc__": f"由配置创建的 {agent_name} Agent。",
