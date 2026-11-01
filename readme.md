@@ -22,6 +22,7 @@ enabled = true
 enabled = true
 name = "general"
 description = "通用任务助手。根据任务选择合适的工具，执行后总结结果。"
+model_task = "tool_use"
 usables = []
 max_steps = 8
 
@@ -29,6 +30,7 @@ max_steps = 8
 enabled = true
 name = "researcher"
 description = "你是资料研究助手。先检索可靠信息，交叉核对后用中文归纳并注明不确定之处。"
+model_task = "sub_actor"
 usables = ["tool-mofox_docs:tool:docs_query"]
 max_steps = 8
 ```
@@ -38,6 +40,7 @@ max_steps = 8
 - `enabled`：是否注册这个 Agent。
 - `name`：Agent 名称，只能使用以小写字母开头的小写字母、数字和下划线；所有启用项名称必须唯一。
 - `description`：既用于主模型选择 Agent，也会追加到内置默认系统提示词中。默认提示词中的工具使用、安全和结果总结规则始终保留。
+- `model_task`：该 Agent 使用的模型任务配置，对应 `config/model.toml` 的 `[model_tasks.<任务名>]`；可选 `utils`、`utils_small`、`actor`、`sub_actor`、`vlm`、`voice`、`video`、`tool_use`，默认 `tool_use`。
 - `usables`：私有可用组件的完整签名列表。必须按组件类型添加前缀：`tool-<插件>:tool:<名称>`、`action-<插件>:action:<名称>` 或 `agent-<插件>:agent:<名称>`。例如 `tool-mofox_docs:tool:docs_query`。
 - `max_steps`：工具调用轮数上限，范围为 1 到 32。
 
@@ -45,7 +48,7 @@ max_steps = 8
 
 ## 行为
 
-Agent 使用 `TOOL_USE` 模型任务执行 ReAct 工具调用循环。每轮会把工具结果交回模型继续处理，直到模型返回最终文本或达到 `max_steps`。每个 Agent 只能使用 `usables` 列出的私有组件。
+Agent 使用各自 `model_task` 对应的模型任务配置执行 ReAct 工具调用循环，默认任务为 `tool_use`。每轮会把工具结果交回模型继续处理，直到模型返回最终文本或达到 `max_steps`。每个 Agent 只能使用 `usables` 列出的私有组件。
 
 新添加的配置 Agent 会在插件重载或 Neo-MoFox 重启后注册。插件 manifest 中预置了默认的 `general` Agent；分发带有其他 Agent 条目的版本时，应将其名称同步加入 `manifest.json` 的 `include` 列表。
 

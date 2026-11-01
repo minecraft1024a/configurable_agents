@@ -6,6 +6,17 @@ from typing import ClassVar
 
 from src.app.plugin_system.base import BaseConfig, Field, SectionBase, config_section
 
+MODEL_TASK_CHOICES = [
+    "utils",
+    "utils_small",
+    "actor",
+    "sub_actor",
+    "vlm",
+    "voice",
+    "video",
+    "tool_use",
+]
+
 
 class ConfigurableAgentsConfig(BaseConfig):
     """定义插件开关和可由数组配置的 Agent。"""
@@ -37,6 +48,14 @@ class ConfigurableAgentsConfig(BaseConfig):
             description="Agent 描述；会展示给主模型，并追加到内置默认系统提示词中作为角色指引",
             input_type="textarea",
             rows=4,
+        )
+        model_task: str = Field(
+            default="tool_use",
+            choices=MODEL_TASK_CHOICES,
+            description="选择 config/model.toml 中用于这个 Agent 的模型任务配置",
+            label="模型任务配置",
+            tag="ai",
+            input_type="select",
         )
         usables: list[str] = Field(
             default_factory=list,

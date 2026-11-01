@@ -9,7 +9,7 @@ from src.app.plugin_system.base import BasePlugin, register_plugin
 from src.kernel.logger import get_logger
 
 from .components.agent import GeneralAgent
-from .config import ConfigurableAgentsConfig
+from .config import ConfigurableAgentsConfig, MODEL_TASK_CHOICES
 
 
 logger = get_logger("configurable_agents")
@@ -79,13 +79,20 @@ class ConfigurableAgentsPlugin(BasePlugin):
             attributes: dict[str, Any] = {
                 "name": agent_name,
                 "description": profile.description.strip(),
+                "model_task": profile.model_task,
                 "usables": _normalize_usables(profile.usables, agent_name),
                 "max_steps": profile.max_steps,
                 "__module__": GeneralAgent.__module__,
                 "__doc__": f"由配置创建的 {agent_name} Agent。",
             }
+            if profile.model_task not in MODEL_TASK_CHOICES:
+                logger.warning(
+                    f"忽略 Agent '{agent_name}'：未知模型任务配置 '{profile.model_task}'"
+                )
+                continue
             if agent_name == "general":
                 GeneralAgent.description = attributes["description"]
+                GeneralAgent.model_task = attributes["model_task"]
                 GeneralAgent.usables = attributes["usables"]
                 GeneralAgent.max_steps = attributes["max_steps"]
                 components.extend([GeneralAgent])

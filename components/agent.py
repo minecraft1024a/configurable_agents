@@ -6,7 +6,6 @@ from typing import Annotated, ClassVar
 
 from src.app.plugin_system.base import BaseAgent
 from src.app.plugin_system.api import llm_api
-from src.app.plugin_system.types import TaskType
 from src.kernel.llm import LLMPayload, ROLE, Text, ToolResult
 
 
@@ -31,6 +30,7 @@ class GeneralAgent(BaseAgent):
     name: ClassVar[str] = "general"
     description: ClassVar[str] = "通用任务助手。"
     associated_types: ClassVar[list[str]] = ["text"]
+    model_task: ClassVar[str] = "tool_use"
     usables: ClassVar[list[str]] = []
     max_steps: ClassVar[int] = 8
 
@@ -49,7 +49,7 @@ class GeneralAgent(BaseAgent):
         if not task.strip():
             return False, "任务描述不能为空。"
 
-        model_set = llm_api.get_model_set_by_task(TaskType.TOOL_USE.value)
+        model_set = llm_api.get_model_set_by_task(self.model_task)
         request = self.create_llm_request(
             model_set=model_set,
             request_name=f"configurable_agent_{self.name}",
