@@ -1,0 +1,29 @@
+{
+  "name": "configurable_agents",
+  "display_name": "自定义 Agent",
+  "version": "1.0.0",
+  "description": "通过 TOML 数组配置创建多个独立 Agent，支持自定义提示词补充和私有 Tool、Action、Agent。",
+  "author": "AI-assisted",
+  "license": "MIT",
+  "dependencies": {
+    "plugins": [],
+    "components": []
+  },
+  "include": [
+    {
+      "component_type": "agent",
+      "component_name": "general",
+      "dependencies": [],
+      "enabled": true
+    }
+  ],
+  "entry_point": "plugin.py",
+  "min_core_version": "1.2.0-rc.2",
+  "api_version": {
+    "llm_api": "1.2.0"
+  },
+  "python_dependencies": [],
+  "dependencies_required": true,
+  "categories": ["tool"],
+  "tags": ["agent", "customization", "llm", "tools"]
+}
