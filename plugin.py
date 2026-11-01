@@ -36,8 +36,9 @@ def _normalize_usables(values: list[str], agent_name: str) -> list[str]:
                 f"Agent '{agent_name}' 的 usable '{value}' 不是匹配前缀的完整组件签名，已忽略"
             )
             continue
-        if value not in normalized:
-            normalized.append(value)
+        # 配置中保留类型前缀用于校验；BaseAgent 的注册表解析只接收纯签名。
+        if signature not in normalized:
+            normalized.append(signature)
     return normalized
 
 
