@@ -30,6 +30,7 @@ class GeneralAgent(BaseAgent):
 
     name: ClassVar[str] = "general"
     description: ClassVar[str] = "通用任务助手。"
+    associated_types: ClassVar[list[str]] = ["text"]
     usables: ClassVar[list[str]] = []
     max_steps: ClassVar[int] = 8
 
