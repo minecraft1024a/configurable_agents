@@ -79,6 +79,7 @@ class ConfigurableAgentsPlugin(BasePlugin):
             attributes: dict[str, Any] = {
                 "name": agent_name,
                 "description": profile.description.strip(),
+                "prompt": profile.prompt.strip(),
                 "model_task": profile.model_task,
                 "usables": _normalize_usables(profile.usables, agent_name),
                 "max_steps": profile.max_steps,
@@ -92,6 +93,7 @@ class ConfigurableAgentsPlugin(BasePlugin):
                 continue
             if agent_name == "general":
                 GeneralAgent.description = attributes["description"]
+                GeneralAgent.prompt = attributes["prompt"]
                 GeneralAgent.model_task = attributes["model_task"]
                 GeneralAgent.usables = attributes["usables"]
                 GeneralAgent.max_steps = attributes["max_steps"]

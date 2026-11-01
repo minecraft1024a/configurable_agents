@@ -32,7 +32,7 @@ class ConfigurableAgentsConfig(BaseConfig):
 
     @config_section("agents", title="自定义 Agent 列表", tag="ai")
     class AgentSection(SectionBase):
-        """定义单个 Agent 的名称、提示词补充和私有工具。"""
+        """定义单个 Agent 的名称、主模型描述、提示词补充和私有工具。"""
 
         enabled: bool = Field(default=True, description="是否注册这个 Agent")
         name: str = Field(
@@ -45,9 +45,15 @@ class ConfigurableAgentsConfig(BaseConfig):
         description: str = Field(
             default="通用任务助手。根据任务选择合适的工具，执行后总结结果。",
             min_length=1,
-            description="Agent 描述；会展示给主模型，并追加到内置默认系统提示词中作为角色指引",
+            description="Agent 描述，仅展示给 MoFox 主调用模型，用于判断何时调用该 Agent",
             input_type="textarea",
             rows=4,
+        )
+        prompt: str = Field(
+            default="",
+            description="追加到 Agent 内置默认系统提示词后的自定义提示词；留空时只使用默认提示词",
+            input_type="textarea",
+            rows=6,
         )
         model_task: str = Field(
             default="tool_use",

@@ -22,6 +22,7 @@ enabled = true
 enabled = true
 name = "general"
 description = "通用任务助手。根据任务选择合适的工具，执行后总结结果。"
+prompt = "回答时优先使用简洁中文，并列出关键依据。"
 model_task = "tool_use"
 usables = []
 max_steps = 8
@@ -29,7 +30,8 @@ max_steps = 8
 [[agents]]
 enabled = true
 name = "researcher"
-description = "你是资料研究助手。先检索可靠信息，交叉核对后用中文归纳并注明不确定之处。"
+description = "资料研究助手，适合需要检索、交叉核对并归纳信息的任务。"
+prompt = "先检索可靠信息，交叉核对后用中文归纳并注明不确定之处。"
 model_task = "sub_actor"
 usables = ["tool-mofox_docs:tool:docs_query"]
 max_steps = 8
@@ -39,7 +41,8 @@ max_steps = 8
 
 - `enabled`：是否注册这个 Agent。
 - `name`：Agent 名称，只能使用以小写字母开头的小写字母、数字和下划线；所有启用项名称必须唯一。
-- `description`：既用于主模型选择 Agent，也会追加到内置默认系统提示词中。默认提示词中的工具使用、安全和结果总结规则始终保留。
+- `description`：仅提供给 MoFox 主调用模型，用于说明 Agent 的用途并帮助主模型判断何时调用。它不会拼入 Agent 的系统提示词。
+- `prompt`：追加到 Agent 内置默认系统提示词后的自定义提示词，用于设置该 Agent 的角色细节、工作方法或输出要求。留空时仍使用完整的内置默认提示词；默认提示词中的工具使用、安全和结果总结规则始终保留。
 - `model_task`：该 Agent 使用的模型任务配置，对应 `config/model.toml` 的 `[model_tasks.<任务名>]`；可选 `utils`、`utils_small`、`actor`、`sub_actor`、`vlm`、`voice`、`video`、`tool_use`，默认 `tool_use`。
 - `usables`：私有可用组件的完整签名列表。必须按组件类型添加前缀：`tool-<插件>:tool:<名称>`、`action-<插件>:action:<名称>` 或 `agent-<插件>:agent:<名称>`。例如 `tool-mofox_docs:tool:docs_query`。
 - `max_steps`：工具调用轮数上限，范围为 1 到 32。

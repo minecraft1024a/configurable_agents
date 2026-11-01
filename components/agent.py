@@ -31,6 +31,7 @@ class GeneralAgent(BaseAgent):
     description: ClassVar[str] = "通用任务助手。"
     associated_types: ClassVar[list[str]] = ["text"]
     model_task: ClassVar[str] = "tool_use"
+    prompt: ClassVar[str] = ""
     usables: ClassVar[list[str]] = []
     max_steps: ClassVar[int] = 8
 
@@ -55,14 +56,16 @@ class GeneralAgent(BaseAgent):
             request_name=f"configurable_agent_{self.name}",
             with_usables=True,
         )
+        system_prompt = DEFAULT_SYSTEM_PROMPT
+        if self.prompt.strip():
+            system_prompt += (
+                "\n当前 Agent 的自定义提示词如下；请在保留以上默认规则的基础上遵循：\n"
+                f"{self.prompt.strip()}"
+            )
         request.add_payload(
             LLMPayload(
                 ROLE.SYSTEM,
-                Text(
-                    f"{DEFAULT_SYSTEM_PROMPT}\n"
-                    "当前 Agent 的自定义描述和执行指引如下；请在保留以上默认规则的基础上遵循：\n"
-                    f"{self.description}"
-                ),
+                Text(system_prompt),
             )
         )
         request.add_payload(LLMPayload(ROLE.USER, Text(task)))
