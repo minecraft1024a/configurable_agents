@@ -1,7 +1,7 @@
 {
     "name": "configurable_agents",
     "display_name": "自定义 Agent",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "通过 TOML 数组配置创建多个独立 Agent，支持分别配置主模型调用描述、Agent 提示词、模型任务配置和私有工具，并要求显式调用 finish-mission 结束任务。",
     "author": "AI-assisted",
     "license": "MIT",

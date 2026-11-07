@@ -75,8 +75,8 @@ class ConfigurableAgentsConfig(BaseConfig):
         max_steps: int = Field(
             default=8,
             ge=1,
-            le=32,
-            description="Agent 最多执行的模型交互轮数，额外保留一轮显式结束机会；仍未结束则失败，范围 1 到 32",
+            le=256,
+            description="Agent 最多执行的模型交互轮数，额外保留一轮显式结束机会；仍未结束则失败，范围 1 到 256",
         )
 
     plugin: PluginSection = Field(default_factory=PluginSection)

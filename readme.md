@@ -45,7 +45,7 @@ max_steps = 8
 - `prompt`：追加到 Agent 内置默认系统提示词后的自定义提示词，用于设置该 Agent 的角色细节、工作方法或输出要求。留空时仍使用完整的内置默认提示词；默认提示词中的工具使用、安全和结果总结规则始终保留。
 - `model_task`：该 Agent 使用的模型任务配置，对应 `config/model.toml` 的 `[model_tasks.<任务名>]`；可选 `utils`、`utils_small`、`actor`、`sub_actor`、`vlm`、`voice`、`video`、`tool_use`，默认 `tool_use`。
 - `usables`：私有可用组件的完整签名列表。必须按组件类型添加前缀：`tool-<插件>:tool:<名称>`、`action-<插件>:action:<名称>` 或 `agent-<插件>:agent:<名称>`。例如 `tool-mofox_docs:tool:docs_query`。
-- `max_steps`：模型交互轮数上限，范围为 1 到 32；系统额外保留一轮供 Agent 调用 `tool-finish-mission`。Agent 必须显式调用它才会结束；普通文本回复或停止调用工具都不会结束任务，仍未显式结束时会返回失败。
+- `max_steps`：模型交互轮数上限，范围为 1 到 256；系统额外保留一轮供 Agent 调用 `tool-finish-mission`。Agent 必须显式调用它才会结束；普通文本回复或停止调用工具都不会结束任务，仍未显式结束时会返回失败。
 
 可用组件签名可在 Neo-MoFox 插件市场/组件列表中查看。引用的组件应在 Agent 被调用时已注册；未找到的组件会被跳过。请避免在同一个 Agent 中配置组件名相同的 Tool、Action 或 Agent，因为模型工具调用名会冲突。
 
